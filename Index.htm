@@ -40,7 +40,8 @@
       margin: auto;
     }
 
-    .welcome {
+    .welcome,
+    .panel {
       background: white;
       border-radius: 16px;
       padding: 20px;
@@ -48,7 +49,8 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    .welcome h2 {
+    .welcome h2,
+    .panel h2 {
       margin-top: 0;
     }
 
@@ -79,6 +81,89 @@
       margin-bottom: 8px;
     }
 
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .btn-primary {
+      background: #6a1b9a;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #eee;
+      color: #333;
+    }
+
+    .producto {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+      background: #fafafa;
+    }
+
+    .producto h3 {
+      margin: 0 0 8px;
+    }
+
+    .producto p {
+      margin: 5px 0;
+    }
+
+    .acciones {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .acciones button {
+      flex: 1;
+      border: none;
+      border-radius: 8px;
+      padding: 9px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .editar {
+      background: #e1bee7;
+    }
+
+    .eliminar {
+      background: #ffcdd2;
+      color: #b71c1c;
+    }
+
+    .oculto {
+      display: none;
+    }
+
     footer {
       position: fixed;
       bottom: 0;
@@ -95,49 +180,205 @@
 
 <body>
 
-  <header>
-    <h1>🏪 Bodega Shekinah</h1>
-    <p>Tu bodega, organizada y fácil de administrar</p>
-  </header>
+<header>
+  <h1>🏪 Bodega Shekinah</h1>
+  <p>Tu bodega, organizada y fácil de administrar</p>
+</header>
 
-  <main class="container">
+<main class="container">
 
-    <section class="welcome">
-      <h2>¡Bienvenida!</h2>
-      <p>
-        Desde aquí podrás controlar tus productos, inventario y ventas.
-      </p>
-    </section>
+  <section class="welcome">
+    <h2>¡Bienvenida! 👋</h2>
+    <p>
+      Desde aquí podrás controlar tus productos, inventario y ventas.
+    </p>
+  </section>
 
-    <section class="menu">
+  <section class="menu" id="menuPrincipal">
 
-      <button onclick="alert('Módulo de Inventario próximamente')">
-        <span class="icon">📦</span>
-        Inventario
-      </button>
+    <button onclick="mostrarInventario()">
+      <span class="icon">📦</span>
+      Inventario
+    </button>
 
-      <button onclick="alert('Módulo de Ventas próximamente')">
-        <span class="icon">🛒</span>
-        Ventas
-      </button>
+    <button onclick="alert('Módulo de Ventas próximamente')">
+      <span class="icon">🛒</span>
+      Ventas
+    </button>
 
-      <button onclick="alert('Módulo de Productos próximamente')">
-        <span class="icon">🏷️</span>
-        Productos
-      </button>
+    <button onclick="alert('Módulo de Productos próximamente')">
+      <span class="icon">🏷️</span>
+      Productos
+    </button>
 
-      <button onclick="alert('Configuración próximamente')">
-        <span class="icon">⚙️</span>
-        Configuración
-      </button>
+    <button onclick="alert('Configuración próximamente')">
+      <span class="icon">⚙️</span>
+      Configuración
+    </button>
 
-    </section>
+  </section>
 
-  </main>
+  <section class="panel oculto" id="inventario">
 
-  <footer>
-    Bodega Shekinah © 2026
-  </footer>
+    <h2>📦 Inventario</h2>
+
+    <div class="form-group">
+      <label>Nombre del producto</label>
+      <input type="text" id="nombreProducto" placeholder="Ej: Harina">
+    </div>
+
+    <div class="form-group">
+      <label>Precio</label>
+      <input type="number" id="precioProducto" placeholder="Ej: 2.50" step="0.01">
+    </div>
+
+    <div class="form-group">
+      <label>Cantidad</label>
+      <input type="number" id="cantidadProducto" placeholder="Ej: 10">
+    </div>
+
+    <button class="btn btn-primary" onclick="registrarProducto()">
+      ➕ Agregar producto
+    </button>
+
+    <button class="btn btn-secondary" onclick="volverMenu()">
+      ↩️ Volver al menú
+    </button>
+
+    <hr>
+
+    <h3>🔎 Buscar producto</h3>
+
+    <input
+      type="text"
+      id="buscarProducto"
+      placeholder="Escribe el nombre..."
+      oninput="mostrarListaProductos()"
+    >
+
+    <div id="listaProductos"></div>
+
+  </section>
+
+</main>
+
+<footer>
+  Bodega Shekinah © 2026
+</footer>
+
+<script src="app.js"></script>
+
+<script>
+
+function mostrarInventario() {
+  document.getElementById("menuPrincipal").classList.add("oculto");
+  document.getElementById("inventario").classList.remove("oculto");
+
+  mostrarListaProductos();
+}
+
+function volverMenu() {
+  document.getElementById("inventario").classList.add("oculto");
+  document.getElementById("menuPrincipal").classList.remove("oculto");
+}
+
+function registrarProducto() {
+
+  const nombre = document.getElementById("nombreProducto").value.trim();
+  const precio = document.getElementById("precioProducto").value;
+  const cantidad = document.getElementById("cantidadProducto").value;
+
+  if (!nombre || precio === "" || cantidad === "") {
+    alert("Por favor completa todos los campos.");
+    return;
+  }
+
+  agregarProducto(nombre, precio, cantidad);
+
+  document.getElementById("nombreProducto").value = "";
+  document.getElementById("precioProducto").value = "";
+  document.getElementById("cantidadProducto").value = "";
+
+  mostrarListaProductos();
+
+  alert("Producto agregado correctamente ✅");
+}
+
+function mostrarListaProductos() {
+
+  const lista = document.getElementById("listaProductos");
+  const busqueda = document
+    .getElementById("buscarProducto")
+    .value
+    .toLowerCase();
+
+  const productosActuales = obtenerProductos();
+
+  const filtrados = productosActuales.filter(producto =>
+    producto.nombre.toLowerCase().includes(busqueda)
+  );
+
+  if (filtrados.length === 0) {
+    lista.innerHTML = "<p>No hay productos registrados.</p>";
+    return;
+  }
+
+  lista.innerHTML = "";
+
+  filtrados.forEach(producto => {
+
+    const div = document.createElement("div");
+    div.className = "producto";
+
+    div.innerHTML = `
+      <h3>🏷️ ${producto.nombre}</h3>
+      <p>💰 Precio: $${producto.precio.toFixed(2)}</p>
+      <p>📦 Cantidad: ${producto.cantidad}</p>
+
+      <div class="acciones">
+        <button class="editar" onclick="editarCantidad(${producto.id})">
+          ✏️ Editar
+        </button>
+
+        <button class="eliminar" onclick="borrarProducto(${producto.id})">
+          🗑️ Eliminar
+        </button>
+      </div>
+    `;
+
+    lista.appendChild(div);
+  });
+}
+
+function editarCantidad(id) {
+
+  const nuevaCantidad = prompt("Escribe la nueva cantidad:");
+
+  if (nuevaCantidad === null || nuevaCantidad === "") {
+    return;
+  }
+
+  actualizarCantidad(id, nuevaCantidad);
+
+  mostrarListaProductos();
+}
+
+function borrarProducto(id) {
+
+  const confirmar = confirm(
+    "¿Seguro que quieres eliminar este producto?"
+  );
+
+  if (!confirmar) {
+    return;
+  }
+
+  eliminarProducto(id);
+
+  mostrarListaProductos();
+}
+
+</script>
 
 </body>
 </html>
